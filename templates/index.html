@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Predicción de Precio de Diamante | Cubic Zirconia EDA 💎</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      body {
+        background: white; /* Fondo blanco */
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url('https://res.cloudinary.com/dvvhnrvav/image/upload/v1750545049/uie8cavsezag7xfjrihp.png');
+        background-size: 50% auto; /* 70% de ancho, alto automático */
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+      /* Asegura que el contenido esté por encima del overlay */
+      .content {
+        position: relative;
+        z-index: 1;
+        padding: 20px;
+      }
+      
+      .button {
+        color: black; /* Color del texto */
+        border-radius: 25px; /* Bordes redondeados */
+        padding: 10px 20px; /* Espaciado interno */
+        text-decoration: none; /* Sin subrayado */
+        display: flex; /* Flexbox para alinear elementos */
+        align-items: center; /* Centrar verticalmente */
+        transition: background-color 0.3s ease; /* Transición suave para el color de fondo */
+      }
+      
+      .button:hover {
+        background-color: #e2e8f0; /* Color de fondo al hacer hover */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+      }
+      
+      .icon {
+        width: 30px; /* Ajustar el tamaño del ícono */
+        height: 30px; /* Ajustar la altura del ícono */
+        object-fit: contain; /* Mantener la proporción de la imagen */
+      }
+      
+      .greeting {
+        color: black; /* Color del texto */
+        margin-left: 100px;
+        font-size: 24px; /* Tamaño de la fuente */
+        margin-right: auto; /* Empujar el contenido de la derecha */
+      }
+      
+      h1 {
+        color: #4a5568; /* Color del título */
+      }
+      
+      p {
+        color: #718096; /* Color del párrafo */
+      }
+      
+      /* Estilos para el contenedor del formulario */
+      .form-container {
+        background-color: #f7fafc; /* Color de fondo claro */
+        border: 1px solid #e2e8f0; /* Borde gris claro */
+        border-radius: 8px; /* Bordes redondeados */
+        padding: 20px; /* Espaciado interno */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center p-8">
+    <!-- Header -->
+    <header class="transparent-header fixed top-0 left-0 w-full z-50 p-4">
+      <ul class="flex justify-end gap-4 list-none m-0 p-0">
+        <div class="greeting">
+          <strong>PROYECTO MES 2</strong> | Modelo predictivo del precio de la piedra
+        </div>
+        <li>
+          <a href="https://github.com/antonioDiaz04/proyecto-m2-exbd.git" target="_blank" class="github-link button flex items-center gap-2 transition-colors duration-300">
+            <i class="fab fa-github text-2xl"></i>
+            <span>Ver en GitHub</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/antonioDiaz04/proyecto-m2-exbd.git" class="github-link button flex items-center gap-2 transition-colors duration-300">
+            <img src="https://res.cloudinary.com/dvvhnrvav/image/upload/v1750547880/ygow5ntndwnn8wuy8vts.png" alt="Colab Icon" class="icon" />
+            <span>Ver código en Colab</span>
+          </a>
+        </li>
+      </ul>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 ml-20">
+      <!-- Left Column -->
+      <div class="space-y-1">
+        <div>
+          <h1 class="text-7xl font-extrabold mb-4">Predicción de precio de la</h1>
+          <h1 class="text-7xl font-extrabold mb-4">cubic zirconia</h1>
+          <p class="text-sm">Modelo predictivo del precio de la piedra</p>
+        </div>
+
+        <!-- Resultado de predicción -->
+        <div id="predictionResult" class="hidden">
+          <div class="bg-gray-900 text-white p-6 rounded-lg">
+            <p class="text-lg font-light">
+              El precio predicho es: <span id="predictedPrice" class="font-bold text-green-400">$0.00</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Form -->
+      <div class="form-container">
+        <div class="mb-8">
+          <h2 class="text-2xl font-light text-black">Datos de la cubic zirconia</h2>
+          <h3 class="text-sm font-medium text-black mb-2">Ingrese los datos de la cubic zirconia para obtener una predicción precisa del valor estimado</h3>
+        </div>
+
+        <form id="diamondForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-medium text-black mb-2">QUILATES</label>
+              <input type="number" name="carat" step="0.01" placeholder="0.30" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none" required />
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-black mb-2">CORTE</label>
+              <select name="cut" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none appearance-none" required>
+                <option value="">Seleccionar corte</option>
+                <option value="Fair">Fair</option>
+                <option value="Good">Good</option>
+                <option value="Very Good">Very Good</option>
+                <option value="Premium">Premium</option>
+                <option value="Ideal">Ideal</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-medium text-black mb-2">COLOR</label>
+              <select name="color" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none appearance-none" required>
+                <option value="">Seleccionar color</option>
+                <option value="D">D (Incoloro)</option>
+                <option value="E">E (Incoloro)</option>
+                <option value="F">F (Incoloro)</option>
+                <option value="G">G (Casi incoloro)</option>
+                <option value="H">H (Casi incoloro)</option>
+                <option value="I">I (Casi incoloro)</option>
+                <option value="J">J (Casi incoloro)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-black mb-2">CLARIDAD</label>
+              <select name="clarity" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none appearance-none" required>
+                <option value="">Seleccionar claridad</option>
+                <option value="FL">FL (Flawless)</option>
+                <option value="IF">IF (Internally Flawless)</option>
+                <option value="VVS1">VVS1</option>
+                <option value="VVS2">VVS2</option>
+                <option value="VS1">VS1</option>
+                <option value="VS2">VS2</option>
+                <option value="SI1">SI1</option>
+                <option value="SI2">SI2</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-medium text-black mb-2">PROFUNDIDAD</label>
+              <input type="number" name="depth" step="0.1" placeholder="61.5" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none" required />
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-black mb-2">MESA</label>
+              <input type="number" name="table" step="0.1" placeholder="55.0" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none" required />
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="grid grid-cols-3 gap-6">
+              <div>
+                <label class="block text-xs font-medium text-black mb-2">DIMENSIÓN X</label>
+                <input type="number" name="x" step="0.01" placeholder="3.95" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none" required />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-black mb-2">DIMENSIÓN Y</label>
+                <input type="number" name="y" step="0.01" placeholder="4.20" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none" required />
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-black mb-2">DIMENSIÓN Z</label>
+                <input type="number" name="z" step="0.01" placeholder="2.65" class="w-full border-b border-gray-300 bg-transparent pb-2 text-sm focus:border-gray-900 focus:outline-none" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-8">
+            <button type="submit" class="inline-flex items-center space-x-2 text-sm font-medium text-white bg-sky-500 hover:bg-sky-400 transition-colors rounded px-4 py-2">
+              <span>Predecir</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <!-- Loading and Error Messages -->
+        <div id="loadingMessage" class="hidden mt-4 text-sm text-gray-600">Calculando predicción...</div>
+        <div id="errorMessage" class="hidden mt-4 text-sm text-red-600">Error al realizar la predicción. Intente nuevamente.</div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('diamondForm').addEventListener('submit', async function (e) {
+        e.preventDefault()
+      
+        // Obtener datos del formulario
+        const formData = new FormData(this)
+        const data = {
+          carat: parseFloat(formData.get('carat')),
+          cut: formData.get('cut'),
+          color: formData.get('color'),
+          clarity: formData.get('clarity'),
+          depth: parseFloat(formData.get('depth')),
+          table: parseFloat(formData.get('table')),
+          x: parseFloat(formData.get('x')),
+          y: parseFloat(formData.get('y')),
+          z: parseFloat(formData.get('z'))
+        }
+      
+        // Mostrar mensaje de carga
+        document.getElementById('loadingMessage').classList.remove('hidden')
+        document.getElementById('predictionResult').classList.add('hidden')
+        document.getElementById('errorMessage').classList.add('hidden')
+      
+        try {
+          // Reemplaza con tu endpoint de predicción real
+          const response = await fetch('/api/predict-diamond-price', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+      
+          if (response.ok) {
+            const result = await response.json()
+      
+            // Mostrar resultado
+            document.getElementById('predictedPrice').textContent = `$${result.predicted_price.toFixed(2)}`
+            document.getElementById('loadingMessage').classList.add('hidden')
+            document.getElementById('predictionResult').classList.remove('hidden')
+          } else {
+            throw new Error('Error en la respuesta del servidor')
+          }
+        } catch (error) {
+          console.error('Error:', error)
+      
+          // Mostrar mensaje de error
+          document.getElementById('loadingMessage').classList.add('hidden')
+          document.getElementById('errorMessage').classList.remove('hidden')
+        }
+      })
+    </script>
+  </body>
+</html>
