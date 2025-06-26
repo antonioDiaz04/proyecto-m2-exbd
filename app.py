@@ -3,8 +3,6 @@ import pandas as pd
 import joblib
 import numpy as np
 import traceback
-import os
-
 app = Flask(__name__)
 
 # Cargar modelos y preprocesadores
@@ -121,7 +119,5 @@ def get_exchange_rate():
     except:
         # Puedes implementar un fallback a otra API o base de datos aquí
         return 20.50  # Valor por defecto
-    
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Render asigna PORT, si no, usa 5000
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
