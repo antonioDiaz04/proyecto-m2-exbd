@@ -12,7 +12,7 @@ Este proyecto tiene como objetivo predecir el precio de laptops basándose en su
 
 ## Captura de la Interfaz
 
-![Captura de la Interfaz](https://github.com/tu-usuario/tu-repositorio/raw/main/Untitled.png)
+![Captura de la Interfaz](https://github.com/antonioDiaz04/proyecto-m2-exbd/blob/main/AVsMIBnpLOhsAAAAAElFTkSuQmCC.jpg)
 
 ## Tecnologías Utilizadas
 
