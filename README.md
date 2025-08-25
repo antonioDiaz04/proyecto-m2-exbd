@@ -18,5 +18,5 @@ Este proyecto tiene como objetivo predecir el precio de laptops basándose en su
 
 - Python
 - Machine Learning
-- Interfaz gráfica (probablemente Tkinter o similar)
+- Interfaz gráfica web
 - Procesamiento de datos
